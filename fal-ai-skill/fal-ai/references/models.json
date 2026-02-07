@@ -44,39 +44,54 @@
         "output_format": { "type": "enum", "default": "jpeg", "options": ["jpeg", "png"] }
       }
     },
-    "fal-ai/kling-video/o3/standard/video-to-video/edit": {
-      "name": "Kling O3 Video-to-Video Edit",
-      "description": "Transform videos with AI effects. Apply styles, character swaps, and visual effects.",
+    "fal-ai/kling-video/o3/pro/video-to-video/edit": {
+      "name": "Kling O3 Video-to-Video Edit [Pro]",
+      "description": "Transform videos with AI effects using Kling O3 Pro.",
       "type": "video-to-video",
       "limits": {
+        "formats": [".mp4", ".mov"],
+        "duration_seconds": "3-10",
+        "resolution": "720-2160px",
         "max_file_size_mb": 200,
-        "resolution_min": 720,
-        "resolution_max": 2160,
-        "max_elements": 4,
-        "note": "Max 4 total elements (video + reference images combined)"
+        "max_elements_total": 4
       },
       "input": {
         "prompt": { 
           "type": "string", 
           "required": true, 
-          "description": "Transformation prompt. Reference video as @Video1, images as @Image1, @Image2, etc." 
+          "description": "Text prompt for video generation. Reference video as @Video1." 
         },
         "video_url": { 
           "type": "string", 
           "required": true, 
-          "description": "Video URL. Limits: 720-2160px resolution, max 200MB" 
+          "description": "Reference video URL. Only .mp4/.mov, 3-10s duration, 720-2160px, max 200MB." 
         },
-        "effect_scene": { 
-          "type": "enum", 
-          "required": false,
-          "description": "Pre-defined effect to apply",
-          "options_sample": ["hug", "kiss", "anime_figure", "3d_cartoon_1_pro", "bullet_time", "day_to_night", "steampunk", "japanese_anime_1", "american_comics"],
-          "note": "100+ effects available - see fal.ai docs for full list"
-        },
-        "element_image_urls": { 
-          "type": "array", 
+        "image_urls": { 
+          "type": "array[string]", 
           "required": false, 
-          "description": "Reference images (max 4 total including video). Reference as @Image1, @Image2 in prompt" 
+          "description": "Reference images for style/appearance. Use as @Image1, @Image2, etc. Max 4 total with elements." 
+        },
+        "keep_audio": { 
+          "type": "boolean", 
+          "required": false,
+          "default": true,
+          "description": "Whether to keep original audio from reference video." 
+        },
+        "elements": { 
+          "type": "array[KlingV3ImageElementInput]", 
+          "required": false, 
+          "description": "Elements (characters/objects) to include. Reference as @Element1, @Element2.",
+          "items": {
+            "reference_image_urls": "array[string] - reference images for the element",
+            "frontal_image_url": "string - frontal view image for better face/body capture"
+          }
+        },
+        "shot_type": {
+          "type": "enum",
+          "required": false,
+          "default": "customize",
+          "options": ["customize"],
+          "description": "The type of multi-shot video generation."
         }
       },
       "output": {
@@ -84,6 +99,19 @@
           "url": "string",
           "content_type": "string"
         }
+      },
+      "example": {
+        "prompt": "Change environment to be fully snow as @Image1. Replace animal with @Element1",
+        "video_url": "https://example.com/video.mp4",
+        "image_urls": ["https://example.com/snow_reference.jpg"],
+        "keep_audio": true,
+        "elements": [
+          {
+            "reference_image_urls": ["https://example.com/element_ref.png"],
+            "frontal_image_url": "https://example.com/element_front.png"
+          }
+        ],
+        "shot_type": "customize"
       }
     }
   }

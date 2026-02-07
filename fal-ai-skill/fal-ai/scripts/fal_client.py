@@ -41,17 +41,20 @@ MODEL_SCHEMAS = {
         "optional": ["strength", "num_inference_steps", "guidance_scale", "seed", "num_images", "output_format"],
         "file_fields": {"image_url": {"type": "string", "accepts": "image"}}
     },
-    "fal-ai/kling-video/o3/standard/video-to-video/edit": {
+    "fal-ai/kling-video/o3/pro/video-to-video/edit": {
         "required": ["prompt", "video_url"],
-        "optional": ["effect_scene", "element_image_urls"],
+        "optional": ["image_urls", "keep_audio", "elements", "shot_type"],
         "file_fields": {
-            "video_url": {"type": "string", "accepts": "video", "max_mb": 200, "min_res": 720, "max_res": 2160},
-            "element_image_urls": {"type": "array", "accepts": "image", "max_count": 4}
+            "video_url": {"type": "string", "accepts": "video", "formats": [".mp4", ".mov"], "max_mb": 200, "min_res": 720, "max_res": 2160, "duration": "3-10s"},
+            "image_urls": {"type": "array", "accepts": "image", "max_count": 4, "description": "Style/appearance refs as @Image1, @Image2"},
+            "elements": {"type": "array", "accepts": "object", "description": "Characters/objects as @Element1, @Element2. Each has reference_image_urls[] and frontal_image_url"}
         },
         "notes": [
             "Reference video in prompt as @Video1",
             "Reference images in prompt as @Image1, @Image2, etc.",
-            "Max 4 total elements (video + images combined)"
+            "Elements in prompt as @Element1, @Element2, etc.",
+            "Max 4 total (elements + reference images) when using video",
+            "Video must be 3-10 seconds, .mp4 or .mov format"
         ]
     }
 }

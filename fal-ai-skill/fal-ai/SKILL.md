@@ -62,24 +62,43 @@ input_data = {
 }
 ```
 
-### fal-ai/kling-video/o3/standard/video-to-video/edit (Video → Video)
-Kling O3 for video transformation with AI effects.
+### fal-ai/kling-video/o3/pro/video-to-video/edit (Video → Video)
+Kling O3 Pro for video transformation with AI effects.
 
 **Limits:**
+- Formats: **.mp4, .mov only**
+- Duration: **3-10 seconds**
+- Resolution: **720-2160px**
 - Max file size: **200MB**
-- Resolution: **720p - 2160p**
-- Max elements: **4** (video + reference images combined)
+- Max elements: **4 total** (elements + reference images combined)
 
 ```python
 input_data = {
-    "prompt": "Transform @Video1 into anime style",  # required - reference video as @Video1
-    "video_url": video_data_uri,                     # required - URL or base64
-    "effect_scene": "anime_figure",                  # optional - preset effect
-    "element_image_urls": [ref_image_uri]            # optional - reference as @Image1, @Image2
+    # Required
+    "prompt": "Change environment to be fully snow as @Image1. Replace animal with @Element1",
+    "video_url": "https://example.com/video.mp4",    # .mp4/.mov, 3-10s, 720-2160px, max 200MB
+    
+    # Optional
+    "image_urls": [                                  # style/appearance references
+        "https://example.com/snow_ref.jpg"           # use as @Image1, @Image2 in prompt
+    ],
+    "keep_audio": True,                              # keep original audio (default: true)
+    "elements": [                                    # characters/objects to inject
+        {
+            "reference_image_urls": [                # reference images for the element
+                "https://example.com/element_ref1.png"
+            ],
+            "frontal_image_url": "https://example.com/element_front.png"  # frontal view (better results)
+        }
+    ],                                               # use as @Element1, @Element2 in prompt
+    "shot_type": "customize"                         # multi-shot type (default: customize)
 }
 ```
 
-**Popular effects:** `hug`, `kiss`, `anime_figure`, `3d_cartoon_1_pro`, `bullet_time`, `day_to_night`, `steampunk`, `japanese_anime_1`, `american_comics` (100+ available)
+**Prompt references:**
+- `@Video1` — the input video
+- `@Image1`, `@Image2` — reference images for style/appearance
+- `@Element1`, `@Element2` — elements (characters/objects) to inject
 
 ## Input Validation
 
