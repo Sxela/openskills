@@ -43,6 +43,48 @@
         "num_images": { "type": "integer", "default": 1 },
         "output_format": { "type": "enum", "default": "jpeg", "options": ["jpeg", "png"] }
       }
+    },
+    "fal-ai/kling-video/o3/standard/video-to-video/edit": {
+      "name": "Kling O3 Video-to-Video Edit",
+      "description": "Transform videos with AI effects. Apply styles, character swaps, and visual effects.",
+      "type": "video-to-video",
+      "limits": {
+        "max_file_size_mb": 200,
+        "resolution_min": 720,
+        "resolution_max": 2160,
+        "max_elements": 4,
+        "note": "Max 4 total elements (video + reference images combined)"
+      },
+      "input": {
+        "prompt": { 
+          "type": "string", 
+          "required": true, 
+          "description": "Transformation prompt. Reference video as @Video1, images as @Image1, @Image2, etc." 
+        },
+        "video_url": { 
+          "type": "string", 
+          "required": true, 
+          "description": "Video URL. Limits: 720-2160px resolution, max 200MB" 
+        },
+        "effect_scene": { 
+          "type": "enum", 
+          "required": false,
+          "description": "Pre-defined effect to apply",
+          "options_sample": ["hug", "kiss", "anime_figure", "3d_cartoon_1_pro", "bullet_time", "day_to_night", "steampunk", "japanese_anime_1", "american_comics"],
+          "note": "100+ effects available - see fal.ai docs for full list"
+        },
+        "element_image_urls": { 
+          "type": "array", 
+          "required": false, 
+          "description": "Reference images (max 4 total including video). Reference as @Image1, @Image2 in prompt" 
+        }
+      },
+      "output": {
+        "video": {
+          "url": "string",
+          "content_type": "string"
+        }
+      }
     }
   }
 }

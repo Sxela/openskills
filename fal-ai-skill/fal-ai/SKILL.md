@@ -62,6 +62,51 @@ input_data = {
 }
 ```
 
+### fal-ai/kling-video/o3/standard/video-to-video/edit (Video → Video)
+Kling O3 for video transformation with AI effects.
+
+**Limits:**
+- Max file size: **200MB**
+- Resolution: **720p - 2160p**
+- Max elements: **4** (video + reference images combined)
+
+```python
+input_data = {
+    "prompt": "Transform @Video1 into anime style",  # required - reference video as @Video1
+    "video_url": video_data_uri,                     # required - URL or base64
+    "effect_scene": "anime_figure",                  # optional - preset effect
+    "element_image_urls": [ref_image_uri]            # optional - reference as @Image1, @Image2
+}
+```
+
+**Popular effects:** `hug`, `kiss`, `anime_figure`, `3d_cartoon_1_pro`, `bullet_time`, `day_to_night`, `steampunk`, `japanese_anime_1`, `american_comics` (100+ available)
+
+## Input Validation
+
+The skill validates inputs before submission. For multi-input models, ensure all required fields are provided:
+
+```bash
+# Check what a model needs
+python3 scripts/fal_client.py model-info "fal-ai/kling-video/o3/standard/video-to-video/edit"
+
+# List all models with their requirements
+python3 scripts/fal_client.py models
+```
+
+**Before submitting, verify:**
+- ✅ All `required` fields are present and non-empty
+- ✅ File fields (`image_url`, `video_url`, etc.) are URLs or base64 data URIs
+- ✅ Arrays (`image_urls`) have at least one item
+- ✅ Video files are within limits (200MB, 720-2160p)
+
+**Example validation output:**
+```
+⚠️  Note: Reference video in prompt as @Video1
+⚠️  Note: Max 4 total elements (video + images combined)
+❌ Validation failed:
+   - Missing required field: video_url
+```
+
 ## Usage
 
 ### CLI Commands
@@ -87,6 +132,9 @@ python3 scripts/fal_client.py list
 
 # Convert local image to base64 data URI
 python3 scripts/fal_client.py to-data-uri /path/to/image.jpg
+
+# Convert local video to base64 data URI (with validation)
+python3 scripts/fal_client.py video-to-uri /path/to/video.mp4
 ```
 
 ### Python Usage
